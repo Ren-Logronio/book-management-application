@@ -1,5 +1,6 @@
-import React from 'react'
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+/*
 import About from '../Components/About'
 import Footer from '../Components/Footer'
 import ImageSlider from '../Components/ImageSlider'
@@ -10,12 +11,27 @@ import RecentAddedBooks from '../Components/RecentAddedBooks'
 import ReservedBooks from '../Components/ReservedBooks'
 import Stats from '../Components/Stats'
 import WelcomeBox from '../Components/WelcomeBox'
+*/
 
 function Home() {
     return (
-        <div id='home'>
-            <ImageSlider/>
-            <WelcomeBox/>
+        <div id='home' className='min-vh-100 d-flex justify-content-center'>
+            <div className="d-flex flex-column justify-content-center">
+                <div className='d-flex flex-column justify-content-center'>
+                    <img src='/logo.png' alt='Book management app logo ' className='align-self-center mb-2' style={{height: "145px", width: "145px"}} />
+                    <p className='h1 mb-3'>Book Management System</p>
+                    <Link to="/login" className='rounded rounded-2 btn btn-outline-success w-100'>
+                        Login
+                    </Link>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+/*
+
+<WelcomeBox/>
             <About/>
             <Stats/>
             <RecentAddedBooks/>
@@ -24,8 +40,7 @@ function Home() {
             <News/>
             <PhotoGallery/>
             <Footer/>
-        </div>
-    )
-}
+
+*/
 
 export default Home

@@ -2,7 +2,7 @@
   display: grid;
   place-items: center;
   height: 100vh;
-  background-color: wheat;
+  background-color: rgb(255, 255, 255);
   position: relative;
 }
 
@@ -24,7 +24,6 @@ a {
 }
 
 form {
-  padding: 30px;
 }
 
 .error-message{
