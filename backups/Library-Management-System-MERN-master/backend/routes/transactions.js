@@ -70,4 +70,4 @@ router.delete("/remove-transaction/:id", async (req, res) => {
     }
 })
 
-export default router
+export default router;

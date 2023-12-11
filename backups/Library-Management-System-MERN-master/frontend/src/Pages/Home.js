@@ -31,15 +31,15 @@ function Home() {
 
 /*
 
-<WelcomeBox/>
-            <About/>
-            <Stats/>
-            <RecentAddedBooks/>
-            <PopularBooks/>
-            <ReservedBooks/>
-            <News/>
-            <PhotoGallery/>
-            <Footer/>
+    <WelcomeBox/>
+    <About/>
+    <Stats/>
+    <RecentAddedBooks/>
+    <PopularBooks/>
+    <ReservedBooks/>
+    <News/>
+    <PhotoGallery/>
+    <Footer/>
 
 */
 
