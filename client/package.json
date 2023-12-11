@@ -12,6 +12,10 @@
     "sass-prod": "sass --no-source-map --style=compressed src/style/scss:src/style/css"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.20",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.7",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.2",
@@ -20,10 +24,12 @@
     "react-auth-verification-context": "^0.0.7",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.0",
     "react-redux": "^9.0.2",
     "react-router-dom": "^6.20.1",
     "sass": "^1.69.5",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "styled-components": "^6.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
