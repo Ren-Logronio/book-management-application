@@ -19,10 +19,6 @@ const ReviewSchema = new mongoose.Schema({
         max: 5,
         require: true,
     },
-    likes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }]
 }, {
     timestamps: true
 });

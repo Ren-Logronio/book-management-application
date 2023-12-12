@@ -34,13 +34,13 @@ const protect = asyncHandler(async (req, res, next) => {
 
 router.post("/login", async (req, res) => {
     try {
-      console.log("Logging in with email " + req.params.email + " and pass " + req.params.password);
+      console.log("Logging in with email " + req.body.email + " and pass " + req.body.password);
       console.log(req.body, "req");
       const user = await User.findOne({ email: req.body.email });
   
       console.log(user, "user");
   
-      !user && res.status(404).json("User not found");
+      !user && res.status(404).send("User not found");
   
       const validPass = await bcrypt.compare(req.body.password, user.password);
       !validPass && res.status(400).json("Wrong Password");

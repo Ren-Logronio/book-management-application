@@ -9,14 +9,15 @@ import usersRouter from './routes/users.js';
 import reviewsRouter from './routes/reviews.js';
 import booksRouter from './routes/books.js';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 var app = express();
+
 var port = process.env.PORT || 3000;
 
 app.listen(3000, function () {
   console.log('PORT - ' + port + '!');
 });
-
 // app.use("/", (req, res) => { res.send("Index - Book Management System") });
 
 mongoose.connect(
@@ -36,6 +37,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/reviews', reviewsRouter);
 app.use('/api/books', booksRouter);
+app.use('/api/test', (req, res) => { res.send("Test") });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -45,6 +47,9 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Authorization, Accept, X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 

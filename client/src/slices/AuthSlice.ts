@@ -7,29 +7,33 @@ export interface Credentials {
   password: string;
 }
 
-interface StateType {
+interface AuthState {
   loading: boolean;
   user: string | null;
   error: any;
   success: boolean;
   token: any;
+  message: string;
 }
 
-const initialState: StateType = {
+const initialState: AuthState = {
   loading: false,
   user: localStorage.getItem('user'),
-  token: '',
+  token: localStorage.getItem('token'),
   error: '',
   success: false,
+  message: '',
 }
 
-const backendURL = import.meta.env.VITE_API_URL;
+const baseURL = "/api/auth";
 
 export const userLogin = createAsyncThunk(
   'auth/login', 
   async ({ email, password }: Credentials, { rejectWithValue }) => {
     try {
       // configure header's Content-Type as JSON
+      console.log(`Initiating login`);
+      console.log(`${email} ${password}`);
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -37,21 +41,23 @@ export const userLogin = createAsyncThunk(
       }
 
       const { data } = await axios.post(
-        `${backendURL}/api/auth/login`,
+        `${baseURL}/login`,
         { email, password },
         config
       );
 
       // store user's token in local storage
-      localStorage.setItem('user', data.user)
+      localStorage.setItem('user', JSON.stringify(data._doc))
+      localStorage.setItem('token', data.token)
 
       return data
-    } catch (error: any) {
+    } catch (err: any) {
+      console.log(err);
       // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message)
+      if (err.response && err.response.data) {
+        return rejectWithValue(err.response.data)
       } else {
-        return rejectWithValue(error.message)
+        return rejectWithValue(err.message)
       }
     }
   }
@@ -61,8 +67,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
+    userLogout: (state) => {
+      console.log("logging out");
       localStorage.removeItem('user') // delete token from storage
+      localStorage.removeItem('token') // delete token from storage
+      state.token = null
       state.loading = false
       state.user = null
       state.error = null
@@ -89,6 +98,6 @@ const authSlice = createSlice({
   },
 })
 
-export const { logout, setCredentials } = authSlice.actions;
+export const { userLogout, setCredentials } = authSlice.actions;
 
 export default authSlice.reducer;

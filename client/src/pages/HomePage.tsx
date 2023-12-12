@@ -1,6 +1,19 @@
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { Navigate } from 'react-router-dom';
 
 function HomePage(){
+    const { user, token } = useSelector((state: RootState) => state.auth);
+
+    console.log(JSON.stringify(user), token);
+
+    if( user && token ) {
+        return(
+            <Navigate replace to='/dashboard' />
+        )
+    };
+
     return (
         <div id='home' className='min-vh-100 d-flex justify-content-center'>
             <div className="d-flex flex-column justify-content-center">

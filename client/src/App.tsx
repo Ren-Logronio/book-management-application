@@ -1,7 +1,7 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Navigate } from 'react-router-dom';
-import { AuthProvider } from "react-auth-verification-context";
-import { useSelector } from 'react-redux'
-import { NavLink, Outlet } from 'react-router-dom'
+import { store } from './app/store';
+import { useSelector, Provider } from 'react-redux'
+import { Outlet } from 'react-router-dom'
 import { RootState } from './app/store';
 import DashboardPage from './pages/DashboardPage';
 import HomePage  from './pages/HomePage';
@@ -17,12 +17,7 @@ function App() {
 
     if (!user || !token) {
       return (
-        <div className='unauthorized'>
-          <h1>Unauthorized :</h1>
-          <span>
-            <NavLink to='/login'>Login</NavLink> to gain access
-          </span>
-        </div>
+            <Navigate replace to='/logout'/>
       )
     }
   
@@ -46,10 +41,11 @@ function App() {
   );
 
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <RouterProvider router={router} />
-    </AuthProvider>
+    </Provider>
   )
+
 }
 
 export default App

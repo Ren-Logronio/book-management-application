@@ -5,11 +5,11 @@ import ReviewReducer from "../slices/ReviewSlice";
 import { useDispatch } from "react-redux";
 import { authApi } from "./api";
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
         auth: AuthReducer,
         book: BookReducer,
-        review: reviewReducer,
+        review: ReviewReducer,
         [authApi.reducerPath]: authApi.reducer,
     },
 });

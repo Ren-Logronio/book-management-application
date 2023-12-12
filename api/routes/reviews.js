@@ -17,15 +17,26 @@ router.get('/book/:bookid', async (req, res, next) => {
     }
 });
 
-// find review by userid 
-router.get('/user/:userid', async (req, res, next) => {
+router.post('/add', async (req, res) => {
     try {
-        const reviews = await Review.find({user: ObjectId(req.params.userid)}).populate('book').sort({_id:-1});
-        console.log("[GET] Review by BookId" + req.params.userid);
-        res.status(200).send(reviews);
-    } catch {
-        console.log("[GET] Review by BookId - Failed - " + err);
+        console.log("Creating new review");
+        const newReview = new Review(req.body);
+        const savedReview = await newReview.save();
+        res.status(200).json(savedReview);
+    } catch (err) {
+        console.log(err);
         res.status(err.status).json(err);
+    }
+});
+
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        console.log("Deleting review");
+        const review = await Review.findByIdAndDelete(req.params.id);
+        res.status(200).json(review);
+    } catch (err) {
+        console.log(err);
+        res.status(errr.status).json(review);
     }
 });
 
