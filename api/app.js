@@ -1,15 +1,14 @@
 
 import createError from 'http-errors';
 import express from 'express';
-import path from 'path';
+import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import multer from 'multer';
 import authRouter from './routes/auth.js';
 import usersRouter from './routes/users.js';
 import reviewsRouter from './routes/reviews.js';
 import booksRouter from './routes/books.js';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 
 var app = express();
 
@@ -37,7 +36,6 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/reviews', reviewsRouter);
 app.use('/api/books', booksRouter);
-app.use('/api/test', (req, res) => { res.send("Test") });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -15,13 +15,12 @@ function LoginPage(){
     const [searchParams, setSearchParams] = useSearchParams();
 
     const logout = searchParams.get('logout');
-    console.log("login -" + logout);
 
     const login = (data: any) => {
-        console.log(data);
         var user: Credentials = {
             email: data.email,
             password: data.password,
+            type: data.type ? "librarian" : "student",
         };
         dispatch(userLogin(user));
     };
@@ -29,12 +28,11 @@ function LoginPage(){
     useEffect(() => {
         if(logout != null) {
             if (user && token) {
-                console.log("logging out");
                 dispatch(userLogout());
             }
             searchParams.delete('logout');
             setSearchParams(searchParams);
-        }
+        } 
     }, [searchParams, setSearchParams, logout]);
 
     if( user && token ) {
@@ -53,12 +51,12 @@ function LoginPage(){
                     <img src='/logo.png' className='align-self-center' style={{height: "45px", width: "45px"}} />
                     <h2 className="h5 fw-bold text-center">Book Management Application</h2>
                     <hr/>
-                    <div className="d-flex flex-row mb-2 px-2">
-                        <p className='text-end m-0 w-100 fw-thin h-5 align-self-center'>I am not a student</p>
-                        <Switch onChange={() => setIsStudent(!isStudent)} color="primary" />
-                    </div>
-                    <div className="text-danger fw-semibold px-2"><p className='text-center'>{ error ? "Error - " + error : "" }</p></div>
+                    <div className="text-danger fw-semibold px-2"><p className='text-center'>{ error ? error : "" }</p></div>
                     <form className="pt-0 p-2" onSubmit={handleSubmit(login)}>
+                        <div className="d-flex flex-row mb-2 px-2">
+                            <p className='text-end m-0 w-100 fw-thin h-5 align-self-center'>I am not a student</p>
+                            <Switch {...register("type")} onChange={() => setIsStudent(!isStudent)} color="primary" />
+                        </div>
                         <div>
                             <label htmlFor="email"><b>{isStudent?"Student Email":"Work Email"}</b></label>
                             <input {...register("email")} className='form-control mb-3' type="text" placeholder={isStudent?"Enter Student Email":"Enter Work Email"} name="email" required/>

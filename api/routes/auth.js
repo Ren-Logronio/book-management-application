@@ -36,22 +36,20 @@ router.post("/login", async (req, res) => {
     try {
       console.log("Logging in with email " + req.body.email + " and pass " + req.body.password);
       console.log(req.body, "req");
-      const user = await User.findOne({ email: req.body.email });
+      const user = await User.findOne({ email: req.body.email, userType: req.body.type });
   
-      console.log(user, "user");
-  
-      !user && res.status(404).send("User not found");
+      !user && res.status(404).send(req.body.type + " not found");
   
       const validPass = await bcrypt.compare(req.body.password, user.password);
       !validPass && res.status(400).json("Wrong Password");
 
+      
       var cleaned = {
-        ...user,
+        ...user._doc,
+        password: "secret",
         token: generateToken(user._id), 
       }
-
-      delete cleaned.password;
-  
+      console.log(cleaned, "user");
       res.status(200).json(cleaned);
     } catch (err) {
       console.log(err);
@@ -63,11 +61,13 @@ router.route("/profile")
     // req.user was set in authMiddleware.js
     const user = await User.findById(req.user._id)
     if (user) {
+      delete user.passwords;
+      console.log(user, "middle");
       var cleaned = { 
-        ...user,
+        ...user.doc,
+        passwords: 'secret',
         token: generateToken(user._id),
       };
-      delete cleaned.password;
       res.json(cleaned)
     } else {
       res.status(404)

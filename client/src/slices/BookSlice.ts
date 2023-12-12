@@ -11,9 +11,8 @@ export interface Book {
   datePublished?: Date;
   keywords?: string;
   bookType?: string;
-  bookCover?: string;
-  bookFile?: string;
-  bookFileFormat?: string;
+  bookCover?: File;
+  bookFile?: File;
 };
 
 export interface BookList {

@@ -38,15 +38,6 @@ const UserSchema = new mongoose.Schema({
         enum: ["student", "librarian"],
         default: "student"
     },
-    idNumber: {
-        type: String,
-        require: true,
-        unique: true,
-    },
-    reviews: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Review"
-    }],
 },
     {
         timestamps: true

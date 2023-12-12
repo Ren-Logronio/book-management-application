@@ -1,0 +1,14 @@
+[{
+  "_id": {
+    "$oid": "6578447789a5bb57ea76a9d5"
+  },
+  "email": "test@email",
+  "password": "$2a$09$JnOw8OmAvHf.WV7OY1x8pOoV5fAlAJLHBY.tINVFvS7VDmw462ZZm",
+  "firstname": "Juan Dela",
+  "middlename": "Mar",
+  "lastname": "Cruz",
+  "mobileNumber": "09659130375",
+  "userType": "librarian",
+  "idNumber": "4758-9999",
+  "reviews": []
+}]

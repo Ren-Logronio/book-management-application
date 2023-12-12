@@ -21,15 +21,11 @@ const BookSchema = new mongoose.Schema({
         type: String,
         enum: ["digital", "print"],
     },
-    bookCover: {
+    bookCoverImageLocation: {
         type: String,
     },
-    bookFile: {
+    bookDocumentLocation: {
         type: String,
-    },
-    bookFileFormat: {
-        type: String,
-        enum: ["pdf", "epub"],
     },
 },  {
     timestamps: true

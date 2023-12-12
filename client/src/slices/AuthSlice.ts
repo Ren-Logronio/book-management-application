@@ -5,6 +5,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 export interface Credentials {
   email: string;
   password: string;
+  type: string;
 }
 
 interface AuthState {
@@ -12,7 +13,7 @@ interface AuthState {
   user: string | null;
   error: any;
   success: boolean;
-  token: any;
+  token: string | null;
   message: string;
 }
 
@@ -29,11 +30,9 @@ const baseURL = "/api/auth";
 
 export const userLogin = createAsyncThunk(
   'auth/login', 
-  async ({ email, password }: Credentials, { rejectWithValue }) => {
+  async ({ email, password, type }: Credentials, { rejectWithValue }) => {
     try {
       // configure header's Content-Type as JSON
-      console.log(`Initiating login`);
-      console.log(`${email} ${password}`);
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -42,12 +41,12 @@ export const userLogin = createAsyncThunk(
 
       const { data } = await axios.post(
         `${baseURL}/login`,
-        { email, password },
+        { email, password, type },
         config
       );
 
       // store user's token in local storage
-      localStorage.setItem('user', JSON.stringify(data._doc))
+      localStorage.setItem('user', JSON.stringify(data))
       localStorage.setItem('token', data.token)
 
       return data
@@ -68,7 +67,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     userLogout: (state) => {
-      console.log("logging out");
       localStorage.removeItem('user') // delete token from storage
       localStorage.removeItem('token') // delete token from storage
       state.token = null
