@@ -1,7 +1,5 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, Navigate } from 'react-router-dom';
 import { store } from './app/store';
-import { applyMiddleware } from '@reduxjs/toolkit';
-import { composeWithDevTools } from '@redux-devtools/extension';
 import { useSelector, Provider, } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { RootState } from './app/store';

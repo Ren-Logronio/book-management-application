@@ -1,4 +1,5 @@
 import Switch from '@mui/material/Switch';
+import { Alert } from 'react-bootstrap';
 import  { Navigate, useSearchParams } from 'react-router-dom';
 import { RootState, useAppDispatch } from '../app/store';
 import { useSelector } from 'react-redux';
@@ -51,7 +52,7 @@ function LoginPage(){
                     <img src='/logo.png' className='align-self-center' style={{height: "45px", width: "45px"}} />
                     <h2 className="h5 fw-bold text-center">Book Management Application</h2>
                     <hr/>
-                    <div className="text-danger fw-semibold px-2"><p className='text-center'>{ error ? error : "" }</p></div>
+                    { error ? <Alert key='danger' variant='danger'>error</Alert> : "" }
                     <form className="pt-0 p-2" onSubmit={handleSubmit(login)}>
                         <div className="d-flex flex-row mb-2 px-2">
                             <p className='text-end m-0 w-100 fw-thin h-5 align-self-center'>I am not a student</p>

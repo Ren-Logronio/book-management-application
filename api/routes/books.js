@@ -67,8 +67,8 @@ router.post(
                 datePublished: req.body.datePublished,
                 keywords: req.body.keywords,
                 bookType: req.body.bookType,
-                bookCoverImageLocation: req.body.bookCoverImageLocation,
-                bookDocumentLocation: req.bookDocumentLocation,
+                bookCoverImage: req.body.bookCoverImage,
+                bookDocument: req.bookDocument,
             });
             const newbook = await book.save();
             console.log("[POST] Add Book - " + req.body.title);

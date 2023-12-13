@@ -9,10 +9,10 @@ export interface Book {
   author?: string;
   description?: string;
   datePublished?: Date;
-  keywords?: string;
+  keywords?: string; 
   bookType?: string;
-  bookCover?: File;
-  bookFile?: File;
+  bookCoverImage?: string;
+  bookDocument?: string;
 };
 
 export interface BookList {

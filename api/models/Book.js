@@ -21,10 +21,10 @@ const BookSchema = new mongoose.Schema({
         type: String,
         enum: ["digital", "print"],
     },
-    bookCoverImageLocation: {
+    bookCoverImage: {
         type: String,
     },
-    bookDocumentLocation: {
+    bookDocument: {
         type: String,
     },
 },  {

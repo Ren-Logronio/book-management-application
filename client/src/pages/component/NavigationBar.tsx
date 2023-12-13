@@ -19,7 +19,7 @@ export default function NavigationBar ({loading, dash}: NavBarProps) {
         <div style={{height: '54px'}} 
             className="min-vw-100 border border-1 d-flex flex-row align-content-center justify-content-between px-md-5 px-2">
             <a className='d-flex align-items-center align-content-center text-black text-decoration-none user-select-none'>
-                <img src='./logo.png' style={{height: '32px', width: '32px'}} />
+                <img src='/logo.png' style={{height: '32px', width: '32px'}} />
                 <p className='m-0 ms-2 fw-semibold d-none d-sm-block'>Book Management Application</p>
             </a>
             { loading ? <div></div> :
@@ -41,7 +41,7 @@ export default function NavigationBar ({loading, dash}: NavBarProps) {
 /*
 
 <a className='d-flex align-items-center align-content-center' href='#'>
-                <p className='m-0'>{navUser.lastname}, {navUser.firstname} {navUser.middlename}</p>
-            </a>
+    <p className='m-0'>{navUser.lastname}, {navUser.firstname} {navUser.middlename}</p>
+</a>
 
 */

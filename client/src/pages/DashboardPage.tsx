@@ -21,8 +21,6 @@ export default function () {
     const [ dash, setDash ] = useState({firstname: '', lastname: '', middlename: '', userType:'' });
     const { user } = useSelector((state: RootState) => state.auth);
 
-    console.log(user);
-
     useEffect(() => {
         console.log("once");
         if(typeof user == 'string') {
@@ -40,7 +38,6 @@ export default function () {
                 middlename: (user as any).middlename, 
                 userType: (user as any).userType
             });
-            setLoading(true);
         }
         setLoading(false);
     }, []);
