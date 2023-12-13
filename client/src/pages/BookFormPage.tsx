@@ -64,13 +64,13 @@ export default function () {
         setAlignment(newAlignment);
     }
 
-    const handleKeywordInputChange = (event: React.ChangeEvent<HTMLInputElement>) => { setKey(event.target.value) };
-
     const handleKeywordDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if((event.code == 'Enter' || event.code == 'Space') && !key.includes(" ") && !keys.includes(key)) {
-            setKeys([...keys, key.replace(" ", "")]);
-            setKey("");
-        }
+   if (/[a-zA-Z]/.test(event.key)) {
+    setKey(key + event.key);
+  } else if (['Space', 'Enter', 'Comma'].includes(event.code)) {
+    setKeys([...Keys, event.key]);
+setKey("");
+  }
     }
 
     const handleRemoveKey = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -123,7 +123,7 @@ export default function () {
                                 key != '' ? <div className="border border-1 p-1 rounded-1">{key.replace(" ", "")}</div> : <></>
                             }
                         </div>
-                        <input className="form-control" value={key} onChange={handleKeywordInputChange} onKeyDown={handleKeywordDown} type="text" />
+                        <input className="form-control" value={key} onKeyDown={handleKeywordDown} type="text" />
                     </div>
 
                     <input type="hidden" value={keys} {...register("keywords")} />
