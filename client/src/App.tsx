@@ -18,7 +18,7 @@ function App() {
 
     if (!user || !token) {
       return (
-            <Navigate replace to='/logout'/>
+        <Navigate replace to='/login'/>
       )
     }
   

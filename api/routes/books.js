@@ -1,7 +1,16 @@
 import express from "express";
 import Book from "../models/Book.js";
+import multer from "multer";
+import { fileURLToPath } from "url";
+import path from "path";
+import fs from "fs";
 
 var router = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const upload = multer({ dest: path.join(__dirname, '../public/uploads/')});
+const pdfDir = path.join(__dirname, '../public/uploads/pdf');
+const imgDir = path.join(__dirname, '../public/uploads/img');
 
 router.get(
     "/all",
@@ -20,12 +29,12 @@ router.get(
     "/:id",
     async (req, res) => {
         try {
-        const book = await Book.findById(req.params.id);
-        console.log("[GET] Book by id - " + req.params.id);
-        res.status(200).send(book);
+            const book = await Book.findById(req.params.id);
+            console.log("[GET] Book by id - " + req.params.id);
+            res.status(200).send(book);
         } catch (err) {
-        console.log("[GET] Book by id - Failed - " + err);
-        res.status(err.status).json(err);
+            console.log("[GET] Book by id - Failed - " + err);
+            res.status(err.status).json(err);
         }
     });
 
@@ -34,21 +43,14 @@ router.get(
     "/search",
     async (req, res) => {
         try {
-            const books = await Book.find({title: {$regex: req.query.title, $options: 'i'}});
-            console.log("[GET] Book search - " + req.query.title);
-            res.status(200).send(books);
-        } catch (err) {
-            console.log("[GET] Book search - Failed - " + err);
-            res.status(err.status).json(err);
-        }
-    });
-
-router.get(
-    "/keywords/",
-    async (req, res) => {
-        try {
-            const books = await Book.find({keywords: {$regex: req.query.keywords, $options: 'i'}});
-            console.log("[GET] Book search - " + req.query.keywords);
+            const regex = new RegExp(query, 'i');
+            const books = await Book.find({
+                $or: [
+                  { title: { $regex: regex } },
+                  { keywords: { $in: [regex] } },
+                ],
+            });
+            console.log("[GET] Book search - " + req.body);
             res.status(200).send(books);
         } catch (err) {
             console.log("[GET] Book search - Failed - " + err);
@@ -57,9 +59,35 @@ router.get(
     });
 
 router.post(
-    "/add",
+    "/add", upload.any(),
     async (req, res) => {
         try {
+            console.log("Adding");
+            console.log(req.body);
+            var bookCoverImage = "";
+            var bookDocument = "";
+            req.files.forEach(file => {
+                console.log(file);
+                // move file to pdfDir or imgDir with appropriate formats
+                if(file.mimetype == "application/pdf" ) {
+                    if (req.body.bookType == "digital") {
+                        bookDocument = file.filename + ".pdf";
+                        const rnPath = path.join(pdfDir, bookDocument);
+                        fs.renameSync(file.path, rnPath);
+                    } else {
+                        // delete the file
+                        fs.unlinkSync(file.path);
+                    }
+                } else if (
+                    file.mimetype == "image/png" ||
+                    file.mimetype == "image/jpg" ||
+                    file.mimetype == "image/jpeg"
+                ) {
+                    bookCoverImage = file.filename + path.extname(file.originalname);
+                    const rnPath = path.join(imgDir, bookCoverImage);
+                    fs.renameSync(file.path, rnPath);
+                }
+            });
             const book = new Book({
                 title: req.body.title,
                 author: req.body.author,
@@ -67,11 +95,10 @@ router.post(
                 datePublished: req.body.datePublished,
                 keywords: req.body.keywords,
                 bookType: req.body.bookType,
-                bookCoverImage: req.body.bookCoverImage,
-                bookDocument: req.bookDocument,
+                bookCoverImage: bookCoverImage,
+                bookDocument: bookDocument,
             });
             const newbook = await book.save();
-            console.log("[POST] Add Book - " + req.body.title);
             res.status(200).send(newbook);
         } catch (err) {
             console.log("[POST] Add Book - Failed - " + err);
@@ -79,12 +106,43 @@ router.post(
         }
     });
 
-router.put(
-    "/edit",
+router.post(
+    "/edit", upload.any(),
     async (req, res) => {
         try {
+            console.log(req.body);
+            var bookCoverImage, bookDocument;
+            req.files.forEach(
+                file => {
+                    console.log(file);
+                    // move file to pdfDir or imgDir with appropriate formats
+                    if(file.mimetype == "application/pdf" ) {
+                        if (req.body.bookType == "digital") {
+                            bookDocument = file.filename + ".pdf";
+                            const rnPath = path.join(pdfDir, bookDocument);
+                            const oldPdfPath = path.join(pdfDir, req.body.bookDocumentFn);
+                            fs.renameSync(file.path, rnPath);
+                            if (req.body.bookDocumentFn) fs.unlinkSync(oldPdfPath);
+                        } else {
+                            fs.unlinkSync(file.path);
+                        }
+                    } else if (
+                        file.mimetype == "image/png" ||
+                        file.mimetype == "image/jpg" ||
+                        file.mimetype == "image/jpeg"
+                    ) {
+                        bookCoverImage = file.filename + path.extname(file.originalname);
+                        const rnPath = path.join(imgDir, bookCoverImage);
+                        const oldImgPath = path.join(imgDir, req.body.bookCoverImageFn);
+                        fs.renameSync(file.path, rnPath);
+                        if (req.body.bookCoverImageFn) fs.unlinkSync(oldImgPath);
+                    } else {
+                        fs.unlinkSync(file.path);
+                    }
+                }
+            );
             await Book.findByIdAndUpdate(req.body.id, {
-                $set: req.body,
+                $set: { ...req.body, bookCoverImage: bookCoverImage || req.body.bodyCoverImageFn, bookDocument: bookDocument || req.bookDocumentFn },
             });
             console.log("[PUT] Edit Book - " + req.body.title);
             res.status(200).json("Book Updated");

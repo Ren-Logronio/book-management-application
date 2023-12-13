@@ -12,14 +12,14 @@ const BookSchema = new mongoose.Schema({
         type: String,
     },
     datePublished: {
-        type: Date,
+        type: String,
     },
     keywords: {
         type: String,
     },
     bookType: {
         type: String,
-        enum: ["digital", "print"],
+        enum: ["digital", "printed"],
     },
     bookCoverImage: {
         type: String,

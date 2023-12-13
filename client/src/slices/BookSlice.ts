@@ -2,17 +2,23 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-const backendURL = import.meta.env.VITE_API_URL;
+const baseURL = "/api/books";
 
 export interface Book {
-  title: string;
-  author?: string;
-  description?: string;
-  datePublished?: Date;
-  keywords?: string; 
-  bookType?: string;
-  bookCoverImage?: string;
-  bookDocument?: string;
+    id?: string;
+    _id?: any;
+    title: string;
+    author?: string;
+    description?: string;
+    datePublished?: string;
+    keywords?: string; 
+    bookType?: string;
+    bookCoverImage?: any;
+    bookDocument?: any;
+    bookCoverImageFn?: string;
+    bookDocumentFn?: string;
+    createdAt?: any;
+    updatedAt?: any;
 };
 
 export interface BookList {
@@ -24,7 +30,7 @@ export interface BookList {
 };
 
 export interface BookView {
-    book?: Book | {};
+    book?: Book;
     success: boolean;
     loading: boolean;
     error: boolean;
@@ -53,7 +59,7 @@ const initialState: BookState = {
         message: "",
     },
     bookView: {
-        book: {},
+        book: undefined,
         success: false,
         loading: false,
         error: false,
@@ -68,10 +74,10 @@ const initialState: BookState = {
 };
 
 export const getAllBooks = createAsyncThunk(
-    'book/all',
+    `book/all`,
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await axios.get(`${backendURL}/api/books/all`);
+            const { data } = await axios.get(`${baseURL}/all`);
             return data;
         } catch (err: any) {
             if (err.response && err.response.data.message) {
@@ -83,17 +89,35 @@ export const getAllBooks = createAsyncThunk(
     }
 );
 
+export const searchBooks = createAsyncThunk(
+    `book/search`,
+    async (query: string, { rejectWithValue }) => {
+        try {
+            const { data } = await axios.get(`${baseURL}/search/${query}`);
+            return data;
+        } catch (err: any) {
+            if (err.response && err.response.data.message) {
+                return rejectWithValue(err.response.data.message);
+            } else {
+                return rejectWithValue(err.message);
+            }
+        }
+    }
+);
+
 export const addBook = createAsyncThunk(
     'book/add',
     async (book: Book, { rejectWithValue }) => {
         try {
             const config = {
                 headers: {
-                  'Content-Type': 'application/json',
+                  'Content-Type': 'multipart/form-data',
                 },
             }
+            console.log("Addbook Invoked");
+            console.log(book);
             const { data } = await axios.post(
-                `${backendURL}/api/books/add`,
+                `${baseURL}/add`,
                 book,
                 config
             );
@@ -114,11 +138,13 @@ export const editBook = createAsyncThunk(
         try {
             const config = {
                 headers: {
-                  'Content-Type': 'application/json',
+                  'Content-Type': 'multipart/form-data',
                 },
             }
+            console.log("Thunk!!!!");
+            console.log(book);
             const { data } = await axios.post(
-                `${backendURL}/api/books/edit`,
+                `${baseURL}/edit`,
                 book,
                 config
             );
@@ -137,7 +163,7 @@ export const deleteBook = createAsyncThunk(
     'book/delete',
     async (bookId: string, { rejectWithValue }) => {
         try {
-            const { data } = await axios.delete(`${backendURL}/api/books/delete/${bookId}`);
+            const { data } = await axios.delete(`${baseURL}/delete/${bookId}`);
             return data;
         } catch (err: any) {
             if (err.response && err.response.data.message) {
@@ -153,7 +179,7 @@ export const getBook = createAsyncThunk(
     'book/get',
     async (bookId: string, { rejectWithValue }) => {
         try {
-            const { data } = await axios.get(`${backendURL}/api/books/${bookId}`);
+            const { data } = await axios.get(`${baseURL}/${bookId}`);
             return data;
         } catch (err: any) {
             if (err.response && err.response.data.message) {
@@ -169,6 +195,12 @@ const bookSlice = createSlice({
     name: 'book',
     initialState,
     reducers: {
+        resetBookForm: (state) => {
+            state.bookForm.loading = false;
+            state.bookForm.success = false;
+            state.bookForm.error = false;
+            state.bookForm.message = "";
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -197,7 +229,7 @@ const bookSlice = createSlice({
             state.bookForm.success = false;
             state.bookForm.message = "Editing";
         })
-        .addCase(editBook.fulfilled, (state, { payload }) => {
+        .addCase(editBook.fulfilled, (state) => {
             state.bookForm.loading = false;
             state.bookForm.error = false;
             state.bookForm.success = true;
@@ -218,7 +250,7 @@ const bookSlice = createSlice({
         .addCase(deleteBook.fulfilled, (state, { payload }) => {
             state.bookForm.loading = false;
             state.bookForm.error = false;
-            state.bookForm.success = true;
+            state.bookForm.success = false;
             state.bookForm.message = "Book deleted successfully";
         })
         .addCase(deleteBook.rejected, (state) => {
@@ -265,7 +297,28 @@ const bookSlice = createSlice({
             state.bookView.success = false;
             state.bookView.message = "Loading Book Failed";
         })
+        .addCase(searchBooks.pending, (state) => {
+            state.bookList.loading = true;
+            state.bookList.error = false;
+            state.bookList.success = false;
+            state.bookList.message = "Searching Books";
+        })
+        .addCase(searchBooks.fulfilled, (state, { payload }) => {
+            state.bookList.books = payload;
+            state.bookList.loading = false;
+            state.bookList.error = false;
+            state.bookList.success = true;
+            state.bookList.message = "Books searched successfully";
+        })
+        .addCase(searchBooks.rejected, (state) => {
+            state.bookList.loading = false;
+            state.bookList.error = true;
+            state.bookList.success = false;
+            state.bookList.message = "Searching Books Failed";
+        });
     },
 });
+
+export const { resetBookForm } = bookSlice.actions;
 
 export default bookSlice.reducer;

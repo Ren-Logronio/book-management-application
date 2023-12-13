@@ -52,15 +52,15 @@ function LoginPage(){
                     <img src='/logo.png' className='align-self-center' style={{height: "45px", width: "45px"}} />
                     <h2 className="h5 fw-bold text-center">Book Management Application</h2>
                     <hr/>
-                    { error ? <Alert key='danger' variant='danger'>error</Alert> : "" }
+                    { error ? <Alert key='danger' variant='danger'>{error}</Alert> : "" }
                     <form className="pt-0 p-2" onSubmit={handleSubmit(login)}>
                         <div className="d-flex flex-row mb-2 px-2">
                             <p className='text-end m-0 w-100 fw-thin h-5 align-self-center'>I am not a student</p>
                             <Switch {...register("type")} onChange={() => setIsStudent(!isStudent)} color="primary" />
                         </div>
                         <div>
-                            <label htmlFor="email"><b>{isStudent?"Student Email":"Work Email"}</b></label>
-                            <input {...register("email")} className='form-control mb-3' type="text" placeholder={isStudent?"Enter Student Email":"Enter Work Email"} name="email" required/>
+                            <label htmlFor="email"><b>Email</b></label>
+                            <input {...register("email")} className='form-control mb-3' type="text" placeholder="Institutional Email" name="email" required/>
                             <label htmlFor="password"><b>Password</b></label>
                             <input {...register("password")} className='form-control mb-3' type="password" placeholder="Enter Password" name="password" required/>
                         </div>
