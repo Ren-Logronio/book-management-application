@@ -5,7 +5,7 @@ import { Spinner, Placeholder } from "react-bootstrap";
 import { Trash, PencilSquare, ArrowLeft } from "react-bootstrap-icons";
 
 import { RootState, useAppDispatch } from "../app/store";
-import { searchBooks } from "../slices/BookSlice";
+import { searchBooks, resetBookList } from "../slices/BookSlice";
 import NavigationBar from "./component/NavigationBar";
 import SearchTab from "./component/SearchTab";
 
@@ -16,8 +16,7 @@ export default function () {
     const [ userLoading, setUserLoading ] = useState(true);
     const [ dash, setDash ] = useState({firstname: '', lastname: '', middlename: '', userType:'' });
     const [ loading, setLoading ] = useState(true);
-    const [ searchParams, setSearchParams ] = useSearchParams();
-    const navigate = useNavigate();
+    const [ searchParams ] = useSearchParams();
 
     const query: string = searchParams.get('q') || "";
 
@@ -42,14 +41,16 @@ export default function () {
     }, []);
 
     useEffect(() => {
+        dispatch(resetBookList());
+        setLoading(true);
         if(!bookList.loading && loading) {
             if(query != null) {
                 const search = query.trim() || "@all";
                 console.log(search);
                 dispatch(searchBooks(search));
             } 
-        }
-    });
+        } 
+    }, []);
 
     if(bookList.success && loading) {
         setLoading(false);

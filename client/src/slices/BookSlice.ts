@@ -201,6 +201,13 @@ const bookSlice = createSlice({
             state.bookForm.success = false;
             state.bookForm.error = false;
             state.bookForm.message = "";
+        },
+        resetBookList: (state) => {
+            state.bookList.books = [];
+            state.bookList.loading = false;
+            state.bookList.success = false;
+            state.bookList.error = false;
+            state.bookList.message = "";
         }
     },
     extraReducers: (builder) => {
@@ -320,6 +327,6 @@ const bookSlice = createSlice({
     },
 });
 
-export const { resetBookForm } = bookSlice.actions;
+export const { resetBookForm, resetBookList } = bookSlice.actions;
 
 export default bookSlice.reducer;
