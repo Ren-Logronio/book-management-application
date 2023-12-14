@@ -40,18 +40,22 @@ router.get(
 
 
 router.get(
-    "/search",
+    "/search/:query",
     async (req, res) => {
         try {
-            const regex = new RegExp(query, 'i');
-            const books = await Book.find({
-                $or: [
-                  { title: { $regex: regex } },
-                  { keywords: { $in: [regex] } },
-                ],
-            });
-            console.log("[GET] Book search - " + req.body);
-            res.status(200).send(books);
+            var books;
+            if (req.params.query != "@all"){
+                const regex = new RegExp(req.params.query, 'i');
+                books = await Book.find({
+                    $or: [
+                        { title: { $regex: regex } },
+                        { keywords: { $in: [regex] } },
+                    ],
+                });
+            } else {
+                books = await Book.find();
+            }
+            res.status(200).json(books);
         } catch (err) {
             console.log("[GET] Book search - Failed - " + err);
             res.status(err.status).json(err);

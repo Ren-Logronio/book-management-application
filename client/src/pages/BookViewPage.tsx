@@ -36,7 +36,7 @@ export default function () {
                 navigate("/dashboard");
             }
         }
-    });
+    }, []);
 
     useEffect(() => {
         if(typeof user == 'string') {
@@ -125,7 +125,7 @@ export default function () {
                                 </div>
                             </div>
                             <div>
-                                { bookView.book ? bookView.book.bookDocument ? <embed src={`/api/files/pdf/${bookView.book.bookDocument}`} width="200px" height="400px" /> : <p className="h5 fst-italic text-center">No Online Copy For This Book</p> : <p className="h5 fst-italic text-center">No Online Copy For This Book</p> }
+                                { bookView.book ? bookView.book.bookDocument ? <embed src={`/api/files/pdf/${bookView.book.bookDocument}`} className="mt-5" width="100%" height="750px" /> : <p className="h5 fst-italic text-center">No Online Copy For This Book</p> : <p className="h5 fst-italic text-center">No Online Copy For This Book</p> }
                             </div>
                         </div>
                     </>

@@ -94,6 +94,7 @@ export const searchBooks = createAsyncThunk(
     async (query: string, { rejectWithValue }) => {
         try {
             const { data } = await axios.get(`${baseURL}/search/${query}`);
+            console.log(data)
             return data;
         } catch (err: any) {
             if (err.response && err.response.data.message) {

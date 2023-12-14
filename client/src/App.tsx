@@ -9,7 +9,6 @@ import LoginPage from './pages/LoginPage';
 import BookViewPage from './pages/BookViewPage';
 import BookFormPage from './pages/BookFormPage';
 import SearchPage from './pages/SearchPage';
-import TestPage from './pages/TestPage';
 
 function App() {
 
@@ -36,7 +35,6 @@ function App() {
           <Route path="/forms/book" element={<BookFormPage />} />
           <Route path="/book/search" element={<SearchPage />} />
         </Route>
-        <Route path="/test" element={<TestPage />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Route>
     )
