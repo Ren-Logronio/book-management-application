@@ -144,7 +144,7 @@ export const editBook = createAsyncThunk(
             }
             console.log("Thunk!!!!");
             console.log(book);
-            const { data } = await axios.post(
+            const { data } = await axios.put(
                 `${baseURL}/edit`,
                 book,
                 config

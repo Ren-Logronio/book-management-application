@@ -110,7 +110,7 @@ router.post(
         }
     });
 
-router.post(
+router.put(
     "/edit", upload.any(),
     async (req, res) => {
         try {
