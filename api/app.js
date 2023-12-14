@@ -7,7 +7,6 @@ import logger from 'morgan';
 import multer from 'multer';
 import authRouter from './routes/auth.js';
 import usersRouter from './routes/users.js';
-import reviewsRouter from './routes/reviews.js';
 import booksRouter from './routes/books.js';
 import dashboardRouter from './routes/dashboard.js';
 import filesRouter from './routes/files.js';
@@ -36,7 +35,6 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/reviews', reviewsRouter);
 app.use('/api/books', booksRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/files', filesRouter);
