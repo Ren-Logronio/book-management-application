@@ -1,3 +1,0 @@
-# book-management-application
-
-finalized
